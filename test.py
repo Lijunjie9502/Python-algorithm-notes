@@ -1,28 +1,35 @@
-# -*- coding:utf-8 -*-
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-from collections import defaultdict
-
-
 class Solution:
-    def deleteDuplication(self, pHead):
-        if pHead is None: return None
-        vals_dict = defaultdict(0)
-        x = pHead
-        while x is not None:
-            vals_dict[x.val] += 1
-            x = x.next
-        x, y = pHead, None
-        while x is not None:
-            if vals_dict[x.val] > 1:
-                if y is None:
-                    pHead = x.next
+    def findRepeatNumber(self, nums: List[int]) -> int:
+        if len(nums) < 2:
+            return False
+
+        for num in nums:
+            if num < 0 or num > len(nums) - 1:
+                return Flase
+
+        start, end = 1, len(nums) - 1
+        while start <= end:
+            middle = (start + end) >> 1
+            counts = self.countRange(nums, start, middle)
+            if start == end:
+                if counts > 1:
+                    return start
                 else:
-                    y.next = x.next
+                    break
+            
+            if counts > middle - start + 1:
+                end = middle
             else:
-                y = x
-            x = x.next
-        return pHead
+                start = middle + 1
+        return False
+                
+    @staticmethod
+    def countRange(nums, start, end):
+        """
+        统计　nums 中在　[start, end] 区间内的元素数目
+        """
+        sums = 0
+        for num in nums:
+            if start <= num <= end:
+                sums += 1
+        return sums
