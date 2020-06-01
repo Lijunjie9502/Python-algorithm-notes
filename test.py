@@ -1,35 +1,25 @@
 class Solution:
-    def findRepeatNumber(self, nums: List[int]) -> int:
-        if len(nums) < 2:
-            return False
+    def replaceSpace(self, s: str) -> str:
+        if len(s) == 0: return ''
+        num_of_blanks = 0
+        for ch in s:
+            if ch = ' ':
+                num_of_blanks += 1
 
-        for num in nums:
-            if num < 0 or num > len(nums) - 1:
-                return Flase
+        res_length = len(s) + num_of_blanks*2
+        str_list = [None]*(res_length)
 
-        start, end = 1, len(nums) - 1
-        while start <= end:
-            middle = (start + end) >> 1
-            counts = self.countRange(nums, start, middle)
-            if start == end:
-                if counts > 1:
-                    return start
-                else:
-                    break
-            
-            if counts > middle - start + 1:
-                end = middle
+        for ch in reversed(s):
+            if ch != ' ':
+                res_length -= 1
+                str_list[res_length] = ch
             else:
-                start = middle + 1
-        return False
-                
-    @staticmethod
-    def countRange(nums, start, end):
-        """
-        统计　nums 中在　[start, end] 区间内的元素数目
-        """
-        sums = 0
-        for num in nums:
-            if start <= num <= end:
-                sums += 1
-        return sums
+                res_length -= 1
+                str_list[res_length] = '0'
+                res_length -= 1
+                str_list[res_length] = '2'
+                res_length -= 1
+                str_list[res_length] = '%'
+        return ''.join(str_list)
+        
+        
