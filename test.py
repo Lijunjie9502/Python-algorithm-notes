@@ -5,29 +5,31 @@
 #         self.left = None
 #         self.right = None
 
+from collections import deque
+
+
 class Solution:
-    def isSubStructure(self, A: TreeNode, B: TreeNode) -> bool:
-        """
-        判断 B 树是否为 A 中的子结构
-        """
-        def doesTree1HasTree2(tree1: TreeNode, tree2: TreeNode ) -> bool:
-            """
-            判断 Tree2 是否为 Tree1 中包含根结点的子结构
-            """
-            if tree2 is None: return True
-            if tree1 is None: return False
-            if tree1.val != tree2.val: return False
-            return doesTree1HasTree2(tree1.left, tree2.left) and doesTree1HasTree2(tree1.right, tree2.right)
-        
-        result = False
-        if A is not None and B is not None:
-            if A.val == B.val:
-                result = doesTree1HasTree2(A, B)
-            if result is False:
-                result = self.isSubStructure(A.left, B)
-            if result is False:
-                result = self.isSubStructure(A.right, B)
-        return result
-        
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        if root is None: return []
+        stacks = [deque(), deque()]
+        current_stack, next_stack = 0, 1
+        res, res_level = [], []
 
+        stacks[current_stack].append(root)
+        while stacks[0] or stacks[1]:
+            item = stacks[current_stack].pop()
+            res_level.append(item.val)
+            if current_stack == 0:
+                if item.left is not None: stacks[next_stack].append(item.left)
+                if item.right is not None: stacks[next_stack].append(item.right)
+            else:
+                if item.right is not None: stacks[next_stack].append(item.right)
+                if item.left is not None: stacks[next_stack].append(item.left)
+            if not stacks[current_stack]:
+                current_stack, next_stack = next_stack, current_stack
+                res.append(res_level)
+                res_level = []
+        return res
+                
 
+                
