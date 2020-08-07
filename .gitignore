@@ -141,3 +141,5 @@ cython_debug/
 .vscode/
 test.py
 mytest.py
+mytest.py
+test.py
